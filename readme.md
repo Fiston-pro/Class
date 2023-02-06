@@ -9,21 +9,23 @@
 projects
 * id
 * name
-* createdat
+* created_at
 * description
-* project income
-* project expenditures
+* project_income
+* project_expenditures
 * customerId
 
 customers
 * id
-* contactperson
-* emailaddress
-* fulladdress
-* phonenumber
+* customer_name
+* contact_person
+* email_address
+* full_address
+* phone_number
 
 filename
 * id
 * filename
+* projectId
 ```
 4. Have fun
