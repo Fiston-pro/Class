@@ -6,7 +6,7 @@
 2. Then make database in sql, you can name it `phpclass` or any other name but tweak the settings in `database.php`
 3. In that database make 3 tables with respective columns
 ```
-Projects
+projects
 * id
 * name
 * createdat
@@ -15,14 +15,14 @@ Projects
 * project expenditures
 * customerId
 
-Customers
+customers
 * id
 * contactperson
 * emailaddress
 * fulladdress
 * phonenumber
 
-Filename
+filename
 * id
 * filename
 ```
