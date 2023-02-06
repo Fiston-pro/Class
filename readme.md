@@ -27,5 +27,11 @@ filename
 * id
 * filename
 * projectId
+
+comments
+* id
+* title
+* content
+* projectId
 ```
 4. Have fun
