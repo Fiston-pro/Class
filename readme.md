@@ -33,5 +33,15 @@ comments
 * title
 * content
 * projectId
+
+employees
+* id
+* name
+* surname
+* address
+* phone_number
+* email_address
+* role
+* projectId
 ```
 4. Have fun
