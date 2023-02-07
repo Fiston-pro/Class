@@ -8,7 +8,7 @@
     $id = $_GET['id'];
 
     // Prepare and execute the SQL statement
-    $sql = "SELECT * FROM projects JOIN customers on projects.customerId = customers.id JOIN filename on projects.filenameId = filename.Id WHERE projects.Id=$id";
+    $sql = "SELECT * FROM projects JOIN customers on projects.customerId = customers.id WHERE projects.Id=$id";
     $result = mysqli_query($mysqli, $sql);
 
     // Fetch the data as an associative array
@@ -92,7 +92,28 @@
                         </div>
                         <div class="form-group">
                             <label>Filename</label>
-                            <input type="text" name="filename" class="form-control" placeholder="Filename" value= "<?php echo $row["filename"]; ?>"required/>
+                            <?php
+                                $result = mysqli_query($mysqli, "SELECT * FROM filename WHERE projectId = " . $id) or die(mysqli_error($mysqli));
+                                $num_rows = mysqli_num_rows($result);
+                                echo '<label>Number of Files: ' . $num_rows . '</label>';
+
+                                echo '<input type="hidden" name="numfiles" value="'.$num_rows.'"';
+
+                                if(mysqli_num_rows($result) > 0) {
+                                    $num = 1;
+                                    while ($row = mysqli_fetch_assoc($result)){
+                                        $namefile = "file" . $num;
+                                        $namefileid = $namefile . "id";
+                                        echo '<input type="hidden" name="dummy" class="form-control mb-1" value= "dummy" required/>';
+                                        echo '<input type="text" name="'.$namefile.'" class="form-control mb-1" value= "'.$row["filename"].'" required/>';
+                                        echo '<input type="hidden" name="'.$namefileid.'" class="form-control mb-1" value= "'.$row["id"].'" />';
+                                        $num++;
+                                    }
+                                } else {
+                                    echo " Files found ";
+                                }  
+  
+                            ?>
                         </div>
                         <input type="submit" value="Save" class="btn btn-primary mb-5 "  />
                     </form>

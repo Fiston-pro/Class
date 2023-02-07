@@ -10,7 +10,8 @@
     switch ($action) {
     case 'addproject':
         $project_name = $_POST['project_name'];
-        $created_at = date("H:i:s");
+        $current_time = time();
+        $created_at = date("Y-m-d H:i:s",$current_time);
         $project_description = $_POST['project_description'];
         $project_income = $_POST['project_income'];
         $project_expenditures = $_POST['project_expenditures'];
@@ -21,7 +22,7 @@
         $customer_full_address = $_POST['customer_full_address'];
         $customer_phone_number = $_POST['customer_phone_number'];
 
-        $filename = $_POST['filename'];
+        $num_files = $_POST['num_items'];
 
         // insert into customer table
         $customerId = "";
@@ -31,18 +32,26 @@
         } else {
             echo "Error: " . $sql . "<br>" . mysqli_error($mysqli);
         }
-        // insert into filename table
-        $filenameId = "";
-        $filenamesql = "INSERT INTO filename (filename) VALUES ('$filename')";
-        mysqli_query($mysqli, $filenamesql);
-        if (mysqli_query($mysqli, $filenamesql)) {
-            $filenameId = mysqli_insert_id($mysqli);
+
+        // insert into projects table
+        $projectId = "";
+        $projectsql = "INSERT INTO projects (name, created_at, description, project_income, project_expenditures, customerId ) VALUES ('$project_name', '$created_at', '$project_description','$project_income','$project_expenditures','$customerId')";
+        if (mysqli_query($mysqli, $projectsql)){
+            $projectId = mysqli_insert_id($mysqli);
         } else {
             echo "Error: " . $sql . "<br>" . mysqli_error($mysqli);
         }
-        // insert into projects table
-        $projectsql = "INSERT INTO projects (name, created_at, description, project_income, project_expenditures, customerId, filenameId ) VALUES ('$project_name', '$created_at', '$project_description','$project_income','$project_expenditures','$customerId','$filenameId')";
-        mysqli_query($mysqli, $projectsql);
+
+        // insert into filename table
+        for($i = 0; $i < $num_files; $i++){
+            $filename = $_POST['file'.($i+1)];
+            $filenamesql = "INSERT INTO filename (filename, projectId) VALUES ('$filename','$projectId')";
+            if (mysqli_query($mysqli, $filenamesql)) {
+                $filenameId = mysqli_insert_id($mysqli);
+            } else {
+                echo "Error: " . $sql . "<br>" . mysqli_error($mysqli);
+            }
+          }
 
         // Redirect to homepage
         header("Location: index.php");
@@ -61,7 +70,8 @@
         $customer_full_address = $_POST['customer_full_address'];
         $customer_phone_number = $_POST['customer_phone_number'];
 
-        $filename = $_POST['filename'];
+        $num_files = $_POST['numfiles'];
+
 
         // update into projects table
         $projectsql = mysqli_prepare($mysqli,"UPDATE projects SET name=?, created_at=?, description=?, project_income=?, project_expenditures=? WHERE id =? ");
@@ -69,7 +79,7 @@
         mysqli_stmt_execute($projectsql);
 
         // Get the customerId and filenameId
-        $query = "SELECT customerId, filenameId FROM projects WHERE id = $project_id";
+        $query = "SELECT customerId FROM projects WHERE id = $project_id";
         $result = mysqli_query($mysqli, $query);
         $row = mysqli_fetch_assoc($result);
 
@@ -80,16 +90,37 @@
         mysqli_stmt_execute($customersql);
 
         // update into filename table
-        $filenameId = $row["filenameId"];
-        $filenamesql = mysqli_prepare($mysqli,"UPDATE filename SET filename=? WHERE Id =? ");
-        mysqli_stmt_bind_param($filenamesql, "si", $filename , $filenameId );
-        mysqli_stmt_execute($filenamesql);
-        
+        if ((int) $num_files){
+
+            for ($i = 1; $i <= (int) $num_files; $i++) {
+                $filenbr = "file". $i ;
+                $namefileid = $filenbr . "id" ;
+                $filename = $_POST[$filenbr];
+                $fileid = $_POST[$namefileid];   
+                $filenamesql = mysqli_prepare($mysqli,"UPDATE filename SET filename=?, projectId=? WHERE id =? ");
+                mysqli_stmt_bind_param($filenamesql, "sii", $filename , $project_id, $fileid );
+                mysqli_stmt_execute($filenamesql);
+              }
+        }        
 
         // Redirect to homepage
         header("Location: index.php");
+        break;
             
+    case 'addcomment':
+        $id = $_POST['id'];
+        $title = $_POST['title'];
+        $comment = $_POST['comment'];     
+        // insert comments
+        $commentsql = "INSERT INTO comments (projectId, title, content) VALUES ('$id', '$title', '$comment')";
+        if (mysqli_query($mysqli, $commentsql)) {
+            $customerId = mysqli_insert_id($mysqli);
+        } else {
+            echo "Error: " . $sql . "<br>" . mysqli_error($mysqli);
+        }   
 
+        // Redirect to view page
+        header("Location: view.php?id=$id");
 
     }
 

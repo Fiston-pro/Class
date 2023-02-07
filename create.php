@@ -71,14 +71,33 @@
                             <input type="number" name="customer_phone_number" class="form-control" placeholder="Customer Phone Number" required/>
                         </div>
                         <div class="form-group">
-                            <label>Filename</label>
-                            <input type="text" name="filename" class="form-control" placeholder="Filename" required/>
-                        </div>
-                        <input type="submit" value="Create" class="btn btn-primary mb-5 "  />
+                            <label for="num_items">Number of files</label>
+                            <input type="number" id="num_items" name="num_items" class="form-control" placeholder="Number of Items" required>
+                        <br>
+                        <div id="item_fields" class="form-group"></div>
+                        <input type="submit" value="Create" class="btn btn-primary mb-5 "/>
                     </form>
                 </div>
             </div>
         </div>
+        
+        <script>
+        document.getElementById("num_items").addEventListener("change", function(){
+            var num_items = document.getElementById("num_items").value;
+            var item_fields = document.getElementById("item_fields");
+            item_fields.innerHTML = ""; // Clear previous fields
+            for(var i = 0; i < num_items; i++){
+                var item_input = document.createElement("input");
+                item_input.type = "text";
+                item_input.setAttribute("class","form-control mb-1");
+                item_input.name = "file" + (i+1);
+                item_input.placeholder = "File " + (i+1);
+                item_fields.appendChild(item_input);
+            }
+        });
+        </script>
+
+
     </body>
 </html>
 

@@ -8,19 +8,22 @@
     $project_id = $_GET['id'];
 
     // get customerId and filenameId
-    $query = "SELECT customerId, filenameId FROM projects WHERE id = $project_id";
+    $query = "SELECT customerId FROM projects WHERE id = $project_id";
     $result = mysqli_query($mysqli, $query);
     $row = mysqli_fetch_assoc($result);
     //delete in projects
     $query = "DELETE FROM projects WHERE id = $project_id";
     $result = mysqli_query($mysqli, $query);
 
-    //delete in customers and filename
+    //delete in customers, comments and filename
     $customerId = $row["customerId"];
     $query = "DELETE FROM customers WHERE id = $customerId";
     $result = mysqli_query($mysqli, $query);
-    $filenameId = $row["filenameId"];
-    $query = "DELETE FROM filename WHERE id = $filenameId";
+
+    $query = "DELETE FROM filename WHERE projectId = $project_id";
+    $result = mysqli_query($mysqli, $query);
+
+    $query = "DELETE FROM comments WHERE projectId = $project_id";
     $result = mysqli_query($mysqli, $query);
 
     // Redirect to homepage

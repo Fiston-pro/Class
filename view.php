@@ -8,7 +8,7 @@
     $id = $_GET['id'];
 
     // Prepare and execute the SQL statement
-    $sql = "SELECT * FROM projects JOIN customers on projects.customerId = customers.id JOIN filename on projects.filenameId = filename.Id WHERE projects.Id=$id";
+    $sql = "SELECT * FROM projects JOIN customers on projects.customerId = customers.id WHERE projects.id=$id";
     $result = mysqli_query($mysqli, $sql);
 
     // Fetch the data as an associative array
@@ -92,7 +92,39 @@
                         </div>
                         <div class="form-group">
                             <label>Filename</label>
-                            <input type="text" name="filename" class="form-control" placeholder="Filename" value= "<?php echo $row["filename"]; ?>"readonly/>
+                            <?php
+                                $result = mysqli_query($mysqli, "SELECT filename FROM filename WHERE projectId = " . $id) or die(mysqli_error($mysqli));
+                                if(mysqli_num_rows($result) > 0) {
+                                    while ($row = mysqli_fetch_assoc($result)){
+                                        echo '<input type="text" name="filename" class="form-control mb-1" value= "'.$row["filename"].'" readonly/>';
+                                    }
+                                } else {
+                                    echo "(No files found)";
+                                }
+                                
+                            ?>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-4" style="margin-left: 10rem">
+                    <h1 class="mt-2">Comments</h1>
+                    <?php
+                       if($result = mysqli_query($mysqli, "SELECT comments.title, comments.content FROM projects JOIN comments ON projects.id=comments.projectId  where projects.id = " . $id))
+                       {
+                            while ($row = mysqli_fetch_assoc($result)){
+                                echo "<div class='card bg-secondary text-light text-center p-1 mb-2' style='width: 75%;'>";
+                                echo "<h4>".$row['title']."</h4>";
+                                echo "<p>".$row['content']."</p>";
+                                echo "</div>";
+                            }
+                       }
+                    ?>
+                    <form method="post" enctype="multipart/form-data" action="process.php?action=addcomment">
+                        <div class="form-group mt-4 mb-4 ">
+                            <input type="hidden" name="id" value=<?php echo $id; ?>>
+                            <input type="text" name="title" class="form-control" placeholder="Add title" style="margin-bottom: 1rem" required/>
+                            <input type="text" name="comment" class="form-control" placeholder="Add comment" required/>
+                            <input type="submit" class="btn btn-secondary mt-2" value="Add comment">
                         </div>
                     </form>
                 </div>
