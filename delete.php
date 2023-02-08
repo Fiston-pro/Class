@@ -15,7 +15,7 @@
     $query = "DELETE FROM projects WHERE id = $project_id";
     $result = mysqli_query($mysqli, $query);
 
-    //delete in customers, comments and filename
+    //delete in customers, comments, filename and employees
     $customerId = $row["customerId"];
     $query = "DELETE FROM customers WHERE id = $customerId";
     $result = mysqli_query($mysqli, $query);
@@ -24,6 +24,9 @@
     $result = mysqli_query($mysqli, $query);
 
     $query = "DELETE FROM comments WHERE projectId = $project_id";
+    $result = mysqli_query($mysqli, $query);
+
+    $query = "DELETE FROM employees WHERE projectId = $project_id";
     $result = mysqli_query($mysqli, $query);
 
     // Redirect to homepage

@@ -115,6 +115,35 @@
   
                             ?>
                         </div>
+                        <div class="form-group">
+                            <label>Employees</label>
+                            <?php
+                                $result = mysqli_query($mysqli, "SELECT * FROM employees WHERE projectId = " . $id) or die(mysqli_error($mysqli));
+                                $num_rows = mysqli_num_rows($result);
+                                echo '<br/><label>Number of Employees: ' . $num_rows . '</label>';
+
+                                echo '<input type="hidden" name="num_employees" value="'.$num_rows.'"';
+
+                                if(mysqli_num_rows($result) > 0) {
+                                    $num = 1;
+                                    while ($row = mysqli_fetch_assoc($result)){
+                                        echo '<br/><br/><label>Employee '.$num.'</label>';
+                                        echo '<input type="hidden" name="dummy" class="form-control mb-1" value= "dummy" required/>';
+                                        echo '<input type="hidden" name="employee_id'.$num.'" class="form-control mb-1" value= "'.$row["id"].'" />';
+                                        echo '<input type="text" name="employee_name'.$num.'" class="form-control mb-1" value= "'.$row["name"].'" required/>';
+                                        echo '<input type="text" name="employee_surname'.$num.'" class="form-control mb-1" value= "'.$row["surname"].'" required/>';
+                                        echo '<input type="text" name="employee_address'.$num.'" class="form-control mb-1" value= "'.$row["address"].'" required/>';
+                                        echo '<input type="text" name="employee_phone_number'.$num.'" class="form-control mb-1" value= "'.$row["phone_number"].'" required/>';
+                                        echo '<input type="text" name="employee_email_address'.$num.'" class="form-control mb-1" value= "'.$row["email_address"].'" required/>';
+                                        echo '<input type="text" name="employee_role'.$num.'" class="form-control mb-1" value= "'.$row["role"].'" required/>';
+                                        $num++;
+                                    }
+                                } else {
+                                    echo "No Employee found found ";
+                                }  
+  
+                            ?>
+                        </div>
                         <input type="submit" value="Save" class="btn btn-primary mb-5 "  />
                     </form>
                 </div>

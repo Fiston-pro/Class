@@ -75,6 +75,13 @@
                             <input type="number" id="num_items" name="num_items" class="form-control" placeholder="Number of Items" required>
                         <br>
                         <div id="item_fields" class="form-group"></div>
+
+                        <div class="form-group">
+                            <label for="num_employees">Number of Employees</label>
+                            <input type="number" id="num_employees" name="num_employees" class="form-control" placeholder="Number of Employees" required>
+                        <br>
+                        <div id="employee_fields" class="form-group"></div>
+
                         <input type="submit" value="Create" class="btn btn-primary mb-5 "/>
                     </form>
                 </div>
@@ -93,6 +100,56 @@
                 item_input.name = "file" + (i+1);
                 item_input.placeholder = "File " + (i+1);
                 item_fields.appendChild(item_input);
+            }
+        });
+        document.getElementById("num_employees").addEventListener("change", function(){
+            var num_employees = document.getElementById("num_employees").value;
+            var employee_fields = document.getElementById("employee_fields");
+            employee_fields.innerHTML = ""; // Clear previous fields
+            for(var i = 0; i < num_employees; i++){
+
+                var employee_name = document.createElement("input");
+                employee_name.type = "text";
+                employee_name.setAttribute("class","form-control mb-1");
+                employee_name.name = "name" + (i+1);
+                employee_name.placeholder = "Name of "+ (i+1)+" employee";
+                employee_fields.appendChild(employee_name)
+
+                var employee_surname = document.createElement("input");
+                employee_surname.type = "text";
+                employee_surname.setAttribute("class","form-control mb-1");
+                employee_surname.name = "surname" + (i+1);
+                employee_surname.placeholder = "Surname of "+ (i+1)+" employee";
+                employee_fields.appendChild(employee_surname)
+
+                var employee_address = document.createElement("input");
+                employee_address.type = "text";
+                employee_address.setAttribute("class","form-control mb-1");
+                employee_address.name = "address" + (i+1);
+                employee_address.placeholder = "Address of "+ (i+1)+" employee";
+                employee_fields.appendChild(employee_address)
+
+                var employee_phone_number = document.createElement("input");
+                employee_phone_number.type = "text";
+                employee_phone_number.setAttribute("class","form-control mb-1");
+                employee_phone_number.name = "phone_number" + (i+1);
+                employee_phone_number.placeholder = "Phone number of "+ (i+1)+" employee";
+                employee_fields.appendChild(employee_phone_number)
+
+                var employee_email_address = document.createElement("input");
+                employee_email_address.type = "text";
+                employee_email_address.setAttribute("class","form-control mb-1");
+                employee_email_address.name = "email_address" + (i+1);
+                employee_email_address.placeholder = "Email Address of "+ (i+1)+" employee";
+                employee_fields.appendChild(employee_email_address)
+
+                var employee_role = document.createElement("input");
+                employee_role.type = "text";
+                employee_role.setAttribute("class","form-control mb-1");
+                employee_role.name = "role" + (i+1);
+                employee_role.placeholder = "Role of "+ (i+1)+" employee";
+                employee_fields.appendChild(employee_role)
+
             }
         });
         </script>

@@ -23,6 +23,8 @@
         $customer_phone_number = $_POST['customer_phone_number'];
 
         $num_files = $_POST['num_items'];
+        $num_employees = $_POST['num_employees'];
+
 
         // insert into customer table
         $customerId = "";
@@ -53,6 +55,22 @@
             }
           }
 
+        // insert into employee table
+        for($i = 0; $i < $num_employees; $i++){
+            $employee_name = $_POST['name'.($i+1)];
+            $employee_surname = $_POST['surname'.($i+1)];
+            $employee_address = $_POST['address'.($i+1)];
+            $employee_phone_number = $_POST['phone_number'.($i+1)];
+            $employee_email_address = $_POST['email_address'.($i+1)];
+            $employee_role = $_POST['role'.($i+1)];
+            $employeesql = "INSERT INTO employees (name, surname, address, phone_number, email_address, role, projectId) VALUES ('$employee_name','$employee_surname','$employee_address','$employee_phone_number','$employee_email_address','$employee_role','$projectId')";
+            if (mysqli_query($mysqli, $employeesql)) {
+                $employeeId = mysqli_insert_id($mysqli);
+            } else {
+                echo "Error: " . $sql . "<br>" . mysqli_error($mysqli);
+            }
+          }
+
         // Redirect to homepage
         header("Location: index.php");
 
@@ -71,8 +89,9 @@
         $customer_phone_number = $_POST['customer_phone_number'];
 
         $num_files = $_POST['numfiles'];
+        $num_employees = $_POST['num_employees'];
 
-
+        echo print_r($_POST);
         // update into projects table
         $projectsql = mysqli_prepare($mysqli,"UPDATE projects SET name=?, created_at=?, description=?, project_income=?, project_expenditures=? WHERE id =? ");
         mysqli_stmt_bind_param($projectsql, "sssiii", $project_name, $created_at, $project_description,$project_income,$project_expenditures,$project_id);
@@ -91,8 +110,9 @@
 
         // update into filename table
         if ((int) $num_files){
-
+            echo 'in if statement';
             for ($i = 1; $i <= (int) $num_files; $i++) {
+                echo 'in a loop';
                 $filenbr = "file". $i ;
                 $namefileid = $filenbr . "id" ;
                 $filename = $_POST[$filenbr];
@@ -101,7 +121,24 @@
                 mysqli_stmt_bind_param($filenamesql, "sii", $filename , $project_id, $fileid );
                 mysqli_stmt_execute($filenamesql);
               }
-        }        
+        }       
+        
+        // update into employee table
+        if ((int) $num_employees){
+            for($i = 1; $i <= $num_employees; $i++){
+                $employee_id = $_POST['employee_id'.$i];
+                $employee_name = $_POST['employee_name'.$i];
+                $employee_surname = $_POST['employee_surname'.$i];
+                $employee_address = $_POST['employee_address'.$i];
+                $employee_phone_number = $_POST['employee_phone_number'.$i];
+                $employee_email_address = $_POST['employee_email_address'.$i];
+                $employee_role = $_POST['employee_role'.$i];
+                $employeesql = mysqli_prepare($mysqli,"UPDATE employees SET name=?, surname=?, address=?, phone_number=?, email_address=?, role=? WHERE id =? ");
+                mysqli_stmt_bind_param($employeesql, "sssissi",$employee_name,$employee_surname,$employee_address,$employee_phone_number,$employee_email_address,$employee_role,$employee_id );
+                mysqli_stmt_execute($employeesql);
+              }
+        }
+
 
         // Redirect to homepage
         header("Location: index.php");

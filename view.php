@@ -104,6 +104,27 @@
                                 
                             ?>
                         </div>
+                        <div class="form-group">
+                            <label>Employees</label>
+                            <?php
+                                $result = mysqli_query($mysqli, "SELECT * FROM employees WHERE projectId = " . $id) or die(mysqli_error($mysqli));
+                                if(mysqli_num_rows($result) > 0) {
+                                    $nbr = 1;
+                                    while ($row = mysqli_fetch_assoc($result)){
+                                        echo '<br/><label>Employee '.$nbr.'</label>';
+                                        echo '<input type="text" class="form-control mb-1" value= "'.$row["name"].'" readonly/>';
+                                        echo '<input type="text" class="form-control mb-1" value= "'.$row["surname"].'" readonly/>';
+                                        echo '<input type="text" class="form-control mb-1" value= "'.$row["address"].'" readonly/>';
+                                        echo '<input type="text" class="form-control mb-1" value= "'.$row["phone_number"].'" readonly/>';
+                                        echo '<input type="text" class="form-control mb-1" value= "'.$row["email_address"].'" readonly/>';
+                                        echo '<input type="text" class="form-control mb-1" value= "'.$row["role"].'" readonly/>';
+                                    }
+                                } else {
+                                    echo "(No Employees found)";
+                                }
+                                
+                            ?>
+                        </div>
                     </form>
                 </div>
                 <div class="col-4" style="margin-left: 10rem">
